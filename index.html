@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Space | Discord Community</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        discord: '#5865F2',
+                        discordDark: '#4752C4',
+                        darkBg: '#0f0e13',
+                        glass: 'rgba(255, 255, 255, 0.05)',
+                        glassBorder: 'rgba(255, 255, 255, 0.1)',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f0e13;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(88, 101, 242, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 25%);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: rgba(20, 20, 25, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0e13;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #5865F2;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4752C4;
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        /* Gallery Hover Effect */
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-discord selection:text-white">
+
+    <!-- Background Elements -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div class="blob bg-purple-600 w-96 h-96 rounded-full top-0 left-1/4 animate-pulse-slow"></div>
+        <div class="blob bg-discord w-80 h-80 rounded-full bottom-0 right-1/4 animate-pulse-slow" style="animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300 py-4" id="navbar">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold tracking-tighter flex items-center gap-2">
+                <i class="fa-brands fa-discord text-discord"></i>
+                <span>NMR<span class="text-discord">TRADE</span></span>
+            </a>
+            
+            <div class="hidden md:flex items-center gap-8 font-medium text-gray-300">
+                <a href="#home" class="hover:text-white transition-colors">Home</a>
+                <a href="#about" class="hover:text-white transition-colors">About Me</a>
+                <a href="#gallery" class="hover:text-white transition-colors">Results</a>
+                <a href="#reviews" class="hover:text-white transition-colors">Reviews</a>
+            </div>
+
+            <a href="https://discord.gg/VneNA32Wkp" target="_blank" class="hidden md:flex items-center gap-2 bg-white/10 hover:bg-discord border border-white/10 px-5 py-2 rounded-full transition-all duration-300 hover:scale-105 backdrop-blur-md">
+                <span>Discord Login</span>
+                <i class="fa-solid fa-arrow-right text-sm"></i>
+            </a>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-2xl" onclick="toggleMenu()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="fixed inset-0 bg-black/95 z-40 transform translate-x-full transition-transform duration-300 flex flex-col justify-center items-center gap-8 md:hidden">
+            <button class="absolute top-6 right-6 text-3xl" onclick="toggleMenu()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <a href="#home" onclick="toggleMenu()" class="text-2xl font-bold">Home</a>
+            <a href="#about" onclick="toggleMenu()" class="text-2xl font-bold">About Me</a>
+            <a href="#gallery" onclick="toggleMenu()" class="text-2xl font-bold">Results</a>
+            <a href="#reviews" onclick="toggleMenu()" class="text-2xl font-bold">Reviews</a>
+            <a href="https://discord.gg/VneNA32Wkp" target="_blank" class="bg-discord px-8 py-3 rounded-full text-xl font-bold mt-4">Join Now</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="min-h-screen flex items-center justify-center relative pt-20">
+        <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            
+            <!-- Text Content -->
+            <div class="order-2 md:order-1 space-y-6 text-center md:text-left reveal opacity-0 translate-y-10 transition-all duration-1000">
+                <div class="inline-block px-4 py-1 rounded-full bg-discord/20 border border-discord/30 text-discord text-sm font-bold tracking-wide mb-2">
+                    👋 WELCOME TO MY WORLD
+                </div>
+                <h1 class="text-5xl md:text-7xl font-extrabold leading-tight">
+                    Join me <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-discord to-purple-400 text-glow">Discord</span>
+                    Now
+                </h1>
+                <p class="text-gray-400 text-lg md:text-xl max-w-lg mx-auto md:mx-0 leading-relaxed">
+                    Hi, I'm a stock index trader. I've been trading for a long time and I want you to join us.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
+                    <a href="https://discord.gg/VneNA32Wkp" target="_blank" class="group relative px-8 py-4 bg-discord hover:bg-discordDark rounded-xl font-bold text-lg transition-all duration-300 shadow-[0_0_20px_rgba(88,101,242,0.4)] hover:shadow-[0_0_40px_rgba(88,101,242,0.6)] overflow-hidden">
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                        <span class="flex items-center gap-3">
+                            <i class="fa-brands fa-discord text-2xl"></i>
+                            Join Server
+                        </span>
+                    </a>
+                    <button onclick="copyLink()" class="px-8 py-4 glass-card rounded-xl font-bold text-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3 group">
+                        <i class="fa-regular fa-copy group-hover:scale-110 transition-transform"></i>
+                        <span id="copy-text">Copy Link</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Visual/Avatar -->
+            <div class="order-1 md:order-2 flex justify-center relative">
+                <!-- Decorative Circles -->
+                <div class="absolute inset-0 border border-white/5 rounded-full animate-spin-slow w-[500px] h-[500px] mx-auto my-auto hidden md:block"></div>
+                <div class="absolute inset-0 border border-dashed border-white/10 rounded-full w-[400px] h-[400px] mx-auto my-auto hidden md:block" style="transform: rotate(45deg)"></div>
+                
+                <!-- Main Image Card -->
+                <div class="relative w-64 h-64 md:w-80 md:h-80 glass-card rounded-3xl p-4 animate-float transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                    <div class="w-full h-full rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-black relative">
+                        <!-- Placeholder Avatar (You can replace this URL) -->
+                        <img src="https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/35/0d/67/350d67c4-6c52-f97a-933f-ed2a6031e164/8721416404276.png/3000x3000bb.jpg" alt="Avatar" class="w-full h-full object-cover">
+                        
+                        <!-- Status Badge -->
+                        <div class="absolute bottom-4 right-4 bg-green-500 w-6 h-6 rounded-full border-4 border-[#1a1a20]"></div>
+                    </div>
+                    
+                    <!-- Floating Badge -->
+                    <div class="absolute -bottom-6 -left-6 glass-card px-4 py-2 rounded-lg flex items-center gap-3 animate-pulse">
+                        <div class="bg-discord p-2 rounded-md">
+                            <i class="fa-solid fa-gamepad text-white"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400">Status</p>
+                            <p class="font-bold text-sm">Online</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Section -->
+    <section class="py-10 border-y border-white/5 bg-black/20">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="space-y-1">
+                    <h3 class="text-3xl font-bold text-white">∞</h3>
+                    <p class="text-gray-400 text-sm">Communication</p>
+                </div>
+                <div class="space-y-1">
+                    <h3 class="text-3xl font-bold text-white">24/7</h3>
+                    <p class="text-gray-400 text-sm">Activity</p>
+                </div>
+                <div class="space-y-1">
+                    <h3 class="text-3xl font-bold text-white">Trading</h3>
+                    <p class="text-gray-400 text-sm">part of life</p>
+                </div>
+                <div class="space-y-1">
+                    <h3 class="text-3xl font-bold text-white">a lot of trading</h3>
+                    <p class="text-gray-400 text-sm">on shares and indices</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section id="about" class="py-24 relative">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto glass-card rounded-3xl p-8 md:p-12 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-discord/10 blur-[80px] rounded-full -mr-32 -mt-32"></div>
+                
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 flex items-center gap-4">
+                    <span class="w-12 h-1 bg-discord rounded-full"></span>
+                    About Me
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="space-y-6 text-gray-300 leading-relaxed">
+                        <p>
+                            Hi, my name is Nikita. I have been trading stocks and shares for over 2 years now and I know how I can help you with trading and promoting this.
+                        </p>
+                        <p>
+                            Come to my dicord channel and write to us in chat that you're new and we'll contact you to work together because everyone starts from scratch.
+                        </p>
+                        
+                        <div class="flex gap-4 pt-4">
+                            <a href="https://www.youtube.com/@nmrtrade" class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                                <i class="fa-brands fa-youtube"></i>
+                            </a>
+                            <!-- <a href="#" class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                                <i class="fa-brands fa-twitch"></i> -->
+                            </a>
+                            <!-- <a href="#" class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                                <i class="fa-brands fa-steam"></i> -->
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/5 hover:border-discord/50 transition-colors">
+                            <i class="fa-solid fa-headset text-2xl text-discord mb-3"></i>
+                            <h4 class="font-bold mb-1">communication</h4>
+                            <p class="text-xs text-gray-400">we always make time</p>
+                        </div>
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/5 hover:border-discord/50 transition-colors">
+                            <i class="fa-solid  text-2xl text-purple-400 mb-3">📈</i>
+                            <h4 class="font-bold mb-1">Trading</h4>
+                            <p class="text-xs text-gray-400">always in life</p>
+                        </div>
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/5 hover:border-discord/50 transition-colors">
+                            <i class="fa-solid fa-film text-2xl text-pink-400 mb-3"></i>
+                            <h4 class="font-bold mb-1">deal views</h4>
+                            <p class="text-xs text-gray-400">there should always be room for improvement and understanding</p>
+                        </div>
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/5 hover:border-discord/50 transition-colors">
+                            <i class="fa-solid  text-2xl text-blue-400 mb-3">📰</i>
+                            <h4 class="font-bold mb-1">news</h4>
+                            <p class="text-xs text-gray-400">one of the most important</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery / Results Section -->
+    <section id="gallery" class="py-20 bg-black/10">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">
+                Your <span class="text-discord">Results</span> & Achievements
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Gallery Item 1 -->
+                <div class="group relative aspect-video rounded-2xl overflow-hidden glass-card gallery-item cursor-pointer">
+                    <img src="https://i.pinimg.com/736x/61/bd/90/61bd9085d54f10aee72a5592778ceb8a.jpg" alt="Result 1" class="w-full h-full object-cover transition-transform duration-500">
+                    <div class="gallery-overlay absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-4">
+                        <i class="fa-solid fa-trophy text-yellow-400 text-3xl mb-2"></i>
+                        <h3 class="font-bold text-xl">Your results if you engage in trading</h3>
+                        <p class="text-gray-300 text-sm"></p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 2 -->
+                <div class="group relative aspect-video rounded-2xl overflow-hidden glass-card gallery-item cursor-pointer">
+                    <img src="https://i.pinimg.com/736x/67/c6/ce/67c6ce17fdadf9e568c0e47901087f6f.jpg" alt="Result 2" class="w-full h-full object-cover transition-transform duration-500">
+                    <div class="gallery-overlay absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-4">
+                        <i class="fa-solid fa-trophy text-yellow-400 text-3xl mb-2"></i>
+                        <h3 class="font-bold text-xl">Your results if you engage in trading</h3>
+                        <p class="text-gray-300 text-sm"></p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 3 -->
+                <div class="group relative aspect-video rounded-2xl overflow-hidden glass-card gallery-item cursor-pointer">
+                    <img src="https://i.pinimg.com/736x/13/30/da/1330dac78a1a5712209a3512d153ff60.jpg" alt="Result 3" class="w-full h-full object-cover transition-transform duration-500">
+                    <div class="gallery-overlay absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-4">
+                        <i class="fa-solid fa-trophy text-yellow-400 text-3xl mb-2"></i>
+                        <h3 class="font-bold text-xl">Your results if you engage in trading</h3>
+                        <p class="text-gray-300 text-sm"></p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 4 -->
+                <div class="group relative aspect-video rounded-2xl overflow-hidden glass-card gallery-item cursor-pointer">
+                    <img src="https://i.pinimg.com/1200x/6f/2c/83/6f2c83c4d734c352192d7b27266354a6.jpg" alt="Result 4" class="w-full h-full object-cover transition-transform duration-500">
+                    <div class="gallery-overlay absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-4">
+                        <i class="fa-solid fa-trophy text-yellow-400 text-3xl mb-2"></i>
+                        <h3 class="font-bold text-xl">Your results if you engage in trading</h3>
+                        <p class="text-gray-300 text-sm"></p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 5 -->
+                <div class="group relative aspect-video rounded-2xl overflow-hidden glass-card gallery-item cursor-pointer md:col-span-2 lg:col-span-1">
+                    <img src="https://i.pinimg.com/736x/f7/b5/f5/f7b5f5519694e1f8077b508904f4b658.jpg" alt="Result 5" class="w-full h-full object-cover transition-transform duration-500">
+                    <div class="gallery-overlay absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-4">
+                        <i class="fa-solid fa-trophy text-yellow-400 text-3xl mb-2"></i>
+                        <h3 class="font-bold text-xl">Your results if you engage in trading</h3>
+                        <p class="text-gray-300 text-sm"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: Reviews Section -->
+    <section id="reviews" class="py-24 relative overflow-hidden">
+        <!-- Decoration -->
+        <div class="absolute right-0 bottom-0 w-96 h-96 bg-purple-600/10 blur-[100px] rounded-full pointer-events-none"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center">
+                Community <span class="text-discord">Reviews</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Review 1 -->
+                <div class="glass-card p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300">
+                    <div class="flex items-center gap-4 mb-4">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=150" alt="User" class="w-14 h-14 rounded-full border-2 border-discord object-cover">
+                        <div>
+                            <h4 class="font-bold text-lg">Alex R.</h4>
+                            <div class="text-yellow-400 text-xs">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed italic">Honestly, joining this server was a game-changer for my portfolio. The analysis is top-tier and the community is incredibly sharp. I’ve learned more about risk management here in two weeks than I did in a year of watching YouTube. If you’re serious about leveling up your trading game, this is the place to be!</p>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="glass-card p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300">
+                    <div class="flex items-center gap-4 mb-4">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150" alt="User" class="w-14 h-14 rounded-full border-2 border-discord object-cover">
+                        <div>
+                            <h4 class="font-bold text-lg">Sarah K.</h4>
+                            <div class="text-yellow-400 text-xs">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed italic">Finally found a trading group that doesn’t just post random 'signals' but actually teaches you the WHY behind the trades. The educational content is super easy to digest, and the mentors are always willing to answer questions. It’s a rare gem in a sea of paid groups that don't deliver. 10/10 recommend!</p>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="glass-card p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300">
+                    <div class="flex items-center gap-4 mb-4">
+                        <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=150" alt="User" class="w-14 h-14 rounded-full border-2 border-discord object-cover">
+                        <div>
+                            <h4 class="font-bold text-lg">Mike T.</h4>
+                            <div class="text-yellow-400 text-xs">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed italic">Best trading Discord out there, period. The vibes are immaculate, the charts are clean, and the alpha is real. I’ve seen my consistency skyrocket since I joined. Don't sleep on this community — it’s literally a goldmine for traders! 🔥</p>
+                </div>
+
+                <!-- Review 4 -->
+                <div class="glass-card p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 lg:ml-12">
+                    <div class="flex items-center gap-4 mb-4">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150" alt="User" class="w-14 h-14 rounded-full border-2 border-discord object-cover">
+                        <div>
+                            <h4 class="font-bold text-lg">Jessica M.</h4>
+                            <div class="text-yellow-400 text-xs">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed italic">I really appreciate the systematic approach this server takes. The market breakdowns are highly detailed and provide a clear roadmap for the trading day. It’s great to be surrounded by like-minded individuals who treat trading like a professional business rather than a gamble. Incredible value.</p>
+                </div>
+
+                <!-- Review 5 -->
+                <div class="glass-card p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 lg:mr-12">
+                    <div class="flex items-center gap-4 mb-4">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150" alt="User" class="w-14 h-14 rounded-full border-2 border-discord object-cover">
+                        <div>
+                            <h4 class="font-bold text-lg">David L.</h4>
+                            <div class="text-yellow-400 text-xs">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed italic">What I love most about this server is the transparency. No fake screenshots, no ego—just real traders sharing real setups. The community is super supportive, and the live sessions are pure gold. It’s like having a professional trading desk right in your pocket. Worth every second!</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action (Discord) -->
+    <section id="community" class="py-20">
+        <div class="container mx-auto px-6 text-center">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to Join?</h2>
+                <p class="text-gray-400 text-lg mb-10">
+                    Click the button below to become part of our community. We are waiting for you!
+                </p>
+                
+                <div class="relative group inline-block">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-discord to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                    <a href="https://discord.gg/VneNA32Wkp" target="_blank" class="relative flex items-center justify-center gap-4 bg-[#1e1f2b] text-white px-12 py-6 rounded-2xl text-xl font-bold border border-white/10 hover:bg-[#252635] transition-all">
+                        <i class="fa-brands fa-discord text-4xl text-discord"></i>
+                        <div class="text-left">
+                            <div class="text-xs text-gray-400 font-normal uppercase tracking-wider">Join Server</div>
+                            <div>Discord Channel</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-white/5 text-center text-gray-500 text-sm">
+        <p>&copy; 2025 All rights reserved. Created for the community.</p>
+    </footer>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-white text-black px-6 py-3 rounded-lg shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3 z-50 font-bold">
+        <i class="fa-solid fa-check text-green-500"></i>
+        Link Copied!
+    </div>
+
+    <script>
+        // Copy Link Functionality
+        function copyLink() {
+            const link = "https://discord.gg/VneNA32Wkp";
+            
+            // Try modern API first, fallback to older method
+            if (navigator.clipboard && window.isSecureContext) {
+                 navigator.clipboard.writeText(link).then(showToast);
+            } else {
+                // Fallback for some iframe environments
+                const textArea = document.createElement("textarea");
+                textArea.value = link;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast();
+                } catch (err) {
+                    console.error('Unable to copy', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('translate-x-full')) {
+                menu.classList.remove('translate-x-full');
+            } else {
+                menu.classList.add('translate-x-full');
+            }
+        }
+
+        // Scroll Animation (Simple Reveal)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        });
+
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+        // Navbar Blur Effect on Scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-black/80', 'backdrop-blur-md', 'shadow-lg');
+            } else {
+                nav.classList.remove('bg-black/80', 'backdrop-blur-md', 'shadow-lg');
+            }
+        });
+    </script>
+</body>
+</html>
