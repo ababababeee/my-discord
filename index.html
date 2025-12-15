@@ -88,6 +88,42 @@
         .gallery-item:hover .gallery-overlay {
             opacity: 1;
         }
+
+        /* Mobile Menu Hamburger Animation */
+        .hamburger line {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform-origin: center;
+        }
+        
+        .hamburger.active line:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+        
+        .hamburger.active line:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active line:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+
+        /* Staggered Animation for Menu Items */
+        .menu-link {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .menu-open .menu-link {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Lock scroll properly on all devices */
+        .scroll-locked {
+            overflow: hidden !important;
+            height: 100vh !important;
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-discord selection:text-white">
@@ -99,13 +135,14 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 transition-all duration-300 py-4" id="navbar">
-        <div class="container mx-auto px-6 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold tracking-tighter flex items-center gap-2">
+    <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4" id="navbar">
+        <div class="container mx-auto px-6 flex justify-between items-center relative z-50">
+            <a href="#" class="text-2xl font-bold tracking-tighter flex items-center gap-2 relative z-50">
                 <i class="fa-brands fa-discord text-discord"></i>
                 <span>NMR<span class="text-discord">TRADE</span></span>
             </a>
             
+            <!-- Desktop Menu -->
             <div class="hidden md:flex items-center gap-8 font-medium text-gray-300">
                 <a href="#home" class="hover:text-white transition-colors">Home</a>
                 <a href="#about" class="hover:text-white transition-colors">About Me</a>
@@ -118,22 +155,49 @@
                 <i class="fa-solid fa-arrow-right text-sm"></i>
             </a>
 
-            <!-- Mobile Menu Button -->
-            <button class="md:hidden text-2xl" onclick="toggleMenu()">
-                <i class="fa-solid fa-bars"></i>
+            <!-- Mobile Menu Button (Animated SVG) -->
+            <button class="md:hidden relative z-50 focus:outline-none p-2 rounded-lg bg-black/20 backdrop-blur-md border border-white/10" onclick="toggleMenu()" aria-label="Toggle Menu">
+                <svg class="hamburger w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
             </button>
         </div>
 
-        <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu" class="fixed inset-0 bg-black/95 z-40 transform translate-x-full transition-transform duration-300 flex flex-col justify-center items-center gap-8 md:hidden">
-            <button class="absolute top-6 right-6 text-3xl" onclick="toggleMenu()">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <a href="#home" onclick="toggleMenu()" class="text-2xl font-bold">Home</a>
-            <a href="#about" onclick="toggleMenu()" class="text-2xl font-bold">About Me</a>
-            <a href="#gallery" onclick="toggleMenu()" class="text-2xl font-bold">Results</a>
-            <a href="#reviews" onclick="toggleMenu()" class="text-2xl font-bold">Reviews</a>
-            <a href="https://discord.gg/VneNA32Wkp" target="_blank" class="bg-discord px-8 py-3 rounded-full text-xl font-bold mt-4">Join Now</a>
+        <!-- Mobile Menu Overlay (BEAUTIFIED & STATIC) -->
+        <div id="mobile-menu" class="fixed inset-0 w-full h-full bg-gradient-to-br from-gray-900/95 via-black/95 to-discordDark/90 backdrop-blur-2xl z-40 translate-x-full transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) flex flex-col justify-between items-center py-24 md:hidden">
+            
+            <!-- Decoration inside menu -->
+            <div class="absolute top-0 right-0 w-80 h-80 bg-discord/10 blur-[120px] rounded-full pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-80 h-80 bg-purple-600/10 blur-[120px] rounded-full pointer-events-none"></div>
+
+            <!-- Menu Links Container -->
+            <div class="flex flex-col items-center gap-8 w-full relative z-10">
+                <a href="#home" onclick="toggleMenu()" class="menu-link flex items-center gap-4 text-3xl font-bold hover:text-discord transition-colors">
+                    <i class="fa-solid fa-house text-2xl opacity-50"></i> Home
+                </a>
+                <a href="#about" onclick="toggleMenu()" class="menu-link flex items-center gap-4 text-3xl font-bold hover:text-discord transition-colors" style="transition-delay: 100ms;">
+                    <i class="fa-solid fa-user text-2xl opacity-50"></i> About Me
+                </a>
+                <a href="#gallery" onclick="toggleMenu()" class="menu-link flex items-center gap-4 text-3xl font-bold hover:text-discord transition-colors" style="transition-delay: 200ms;">
+                    <i class="fa-solid fa-trophy text-2xl opacity-50"></i> Results
+                </a>
+                <a href="#reviews" onclick="toggleMenu()" class="menu-link flex items-center gap-4 text-3xl font-bold hover:text-discord transition-colors" style="transition-delay: 300ms;">
+                    <i class="fa-solid fa-star text-2xl opacity-50"></i> Reviews
+                </a>
+                
+                <a href="https://discord.gg/VneNA32Wkp" target="_blank" class="menu-link bg-discord px-10 py-4 rounded-full text-xl font-bold mt-6 shadow-[0_0_30px_rgba(88,101,242,0.3)] hover:shadow-[0_0_50px_rgba(88,101,242,0.6)] transition-all flex items-center gap-3" style="transition-delay: 400ms;">
+                    <i class="fa-brands fa-discord text-2xl"></i> Join Now
+                </a>
+            </div>
+
+            <!-- Socials / Bottom Info -->
+            <div class="flex gap-6 relative z-10 menu-link" style="transition-delay: 500ms;">
+                <a href="#" class="text-gray-400 hover:text-white text-2xl transition-transform hover:scale-110"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white text-2xl transition-transform hover:scale-110"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white text-2xl transition-transform hover:scale-110"><i class="fa-brands fa-telegram"></i></a>
+            </div>
         </div>
     </nav>
 
@@ -179,7 +243,7 @@
                 <!-- Main Image Card -->
                 <div class="relative w-64 h-64 md:w-80 md:h-80 glass-card rounded-3xl p-4 animate-float transform rotate-3 hover:rotate-0 transition-transform duration-500">
                     <div class="w-full h-full rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-black relative">
-                        <!-- Placeholder Avatar (You can replace this URL) -->
+                        <!-- Avatar -->
                         <img src="https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/35/0d/67/350d67c4-6c52-f97a-933f-ed2a6031e164/8721416404276.png/3000x3000bb.jpg" alt="Avatar" class="w-full h-full object-cover">
                         
                         <!-- Status Badge -->
@@ -249,12 +313,6 @@
                             <a href="https://www.youtube.com/@nmrtrade" class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-white hover:text-black transition-all">
                                 <i class="fa-brands fa-youtube"></i>
                             </a>
-                            <!-- <a href="#" class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-white hover:text-black transition-all">
-                                <i class="fa-brands fa-twitch"></i> -->
-                            </a>
-                            <!-- <a href="#" class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-white hover:text-black transition-all">
-                                <i class="fa-brands fa-steam"></i> -->
-                            </a>
                         </div>
                     </div>
                     
@@ -265,17 +323,17 @@
                             <p class="text-xs text-gray-400">we always make time</p>
                         </div>
                         <div class="bg-white/5 p-4 rounded-xl border border-white/5 hover:border-discord/50 transition-colors">
-                            <i class="fa-solid  text-2xl text-purple-400 mb-3">📈</i>
+                            <i class="fa-solid fa-chart-line text-2xl text-purple-400 mb-3"></i>
                             <h4 class="font-bold mb-1">Trading</h4>
                             <p class="text-xs text-gray-400">always in life</p>
                         </div>
                         <div class="bg-white/5 p-4 rounded-xl border border-white/5 hover:border-discord/50 transition-colors">
                             <i class="fa-solid fa-film text-2xl text-pink-400 mb-3"></i>
                             <h4 class="font-bold mb-1">deal views</h4>
-                            <p class="text-xs text-gray-400">there should always be room for improvement and understanding</p>
+                            <p class="text-xs text-gray-400">room for improvement</p>
                         </div>
                         <div class="bg-white/5 p-4 rounded-xl border border-white/5 hover:border-discord/50 transition-colors">
-                            <i class="fa-solid  text-2xl text-blue-400 mb-3">📰</i>
+                            <i class="fa-regular fa-newspaper text-2xl text-blue-400 mb-3"></i>
                             <h4 class="font-bold mb-1">news</h4>
                             <p class="text-xs text-gray-400">one of the most important</p>
                         </div>
@@ -346,9 +404,8 @@
         </div>
     </section>
 
-    <!-- NEW: Reviews Section -->
+    <!-- Reviews Section -->
     <section id="reviews" class="py-24 relative overflow-hidden">
-        <!-- Decoration -->
         <div class="absolute right-0 bottom-0 w-96 h-96 bg-purple-600/10 blur-[100px] rounded-full pointer-events-none"></div>
 
         <div class="container mx-auto px-6 relative z-10">
@@ -357,7 +414,6 @@
             </h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                
                 <!-- Review 1 -->
                 <div class="glass-card p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300">
                     <div class="flex items-center gap-4 mb-4">
@@ -369,9 +425,9 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-gray-300 leading-relaxed italic">Honestly, joining this server was a game-changer for my portfolio. The analysis is top-tier and the community is incredibly sharp. I’ve learned more about risk management here in two weeks than I did in a year of watching YouTube. If you’re serious about leveling up your trading game, this is the place to be!</p>
+                    <p class="text-gray-300 leading-relaxed italic">Honestly, joining this server was a game-changer for my portfolio. The analysis is top-tier and the community is incredibly sharp.</p>
                 </div>
-
+                
                 <!-- Review 2 -->
                 <div class="glass-card p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300">
                     <div class="flex items-center gap-4 mb-4">
@@ -383,7 +439,7 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-gray-300 leading-relaxed italic">Finally found a trading group that doesn’t just post random 'signals' but actually teaches you the WHY behind the trades. The educational content is super easy to digest, and the mentors are always willing to answer questions. It’s a rare gem in a sea of paid groups that don't deliver. 10/10 recommend!</p>
+                    <p class="text-gray-300 leading-relaxed italic">Finally found a trading group that doesn’t just post random 'signals' but actually teaches you the WHY behind the trades.</p>
                 </div>
 
                 <!-- Review 3 -->
@@ -397,7 +453,7 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-gray-300 leading-relaxed italic">Best trading Discord out there, period. The vibes are immaculate, the charts are clean, and the alpha is real. I’ve seen my consistency skyrocket since I joined. Don't sleep on this community — it’s literally a goldmine for traders! 🔥</p>
+                    <p class="text-gray-300 leading-relaxed italic">Best trading Discord out there, period. The vibes are immaculate, the charts are clean, and the alpha is real.</p>
                 </div>
 
                 <!-- Review 4 -->
@@ -411,7 +467,7 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-gray-300 leading-relaxed italic">I really appreciate the systematic approach this server takes. The market breakdowns are highly detailed and provide a clear roadmap for the trading day. It’s great to be surrounded by like-minded individuals who treat trading like a professional business rather than a gamble. Incredible value.</p>
+                    <p class="text-gray-300 leading-relaxed italic">I really appreciate the systematic approach this server takes. The market breakdowns are highly detailed and provide a clear roadmap.</p>
                 </div>
 
                 <!-- Review 5 -->
@@ -425,9 +481,8 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-gray-300 leading-relaxed italic">What I love most about this server is the transparency. No fake screenshots, no ego—just real traders sharing real setups. The community is super supportive, and the live sessions are pure gold. It’s like having a professional trading desk right in your pocket. Worth every second!</p>
+                    <p class="text-gray-300 leading-relaxed italic">What I love most about this server is the transparency. No fake screenshots, no ego—just real traders sharing real setups.</p>
                 </div>
-
             </div>
         </div>
     </section>
@@ -471,11 +526,9 @@
         function copyLink() {
             const link = "https://discord.gg/VneNA32Wkp";
             
-            // Try modern API first, fallback to older method
             if (navigator.clipboard && window.isSecureContext) {
                  navigator.clipboard.writeText(link).then(showToast);
             } else {
-                // Fallback for some iframe environments
                 const textArea = document.createElement("textarea");
                 textArea.value = link;
                 textArea.style.position = "fixed";
@@ -501,15 +554,44 @@
             }, 3000);
         }
 
-        // Mobile Menu Toggle
+        // --- NEW OPTIMIZED MOBILE MENU ---
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
+            const hamburger = document.querySelector('.hamburger');
+            const html = document.documentElement;
+            const body = document.body;
+            
+            // Toggle Logic
             if (menu.classList.contains('translate-x-full')) {
+                // OPEN
                 menu.classList.remove('translate-x-full');
+                menu.classList.add('menu-open'); // Triggers delayed animations
+                hamburger.classList.add('active'); // Animates icon
+                
+                // Static Lock (Fixing the scroll issue)
+                html.classList.add('scroll-locked');
+                body.classList.add('scroll-locked');
             } else {
+                // CLOSE
                 menu.classList.add('translate-x-full');
+                menu.classList.remove('menu-open');
+                hamburger.classList.remove('active');
+                
+                // Unlock
+                html.classList.remove('scroll-locked');
+                body.classList.remove('scroll-locked');
             }
         }
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.menu-link').forEach(link => {
+            link.addEventListener('click', () => {
+               const menu = document.getElementById('mobile-menu');
+               if (!menu.classList.contains('translate-x-full')) {
+                   toggleMenu();
+               }
+            });
+        });
 
         // Scroll Animation (Simple Reveal)
         const observer = new IntersectionObserver((entries) => {
